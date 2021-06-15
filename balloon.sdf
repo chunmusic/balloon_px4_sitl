@@ -1,0 +1,272 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<?xml version="1.0" ?>
+<!-- DO NOT EDIT: Generated from balloon.sdf.jinja -->
+<sdf version="1.5">
+
+  <model name="balloon">
+
+    <self_collide>false</self_collide>
+    <static>false</static>
+
+    
+    <link name="hull">
+      <pose>-0.1299999999999999 0 3.1 0 0 0</pose>
+      <inertial>
+        <pose>0.10232918707494988 0 -0.3947115825081927 0 0 0</pose>
+        <mass>7.0947499999999994</mass>
+        <inertia>
+          <ixx>1.1632068333333339</ixx>
+          <iyy>4.826487708333334</iyy>
+          <izz>7.208087676333334</izz>
+        </inertia>
+      </inertial>
+
+      <gravity>true</gravity>
+      <self_collide>false</self_collide>
+      <velocity_decay/>
+
+      
+      <visual name="hull_visual">
+        <geometry>
+          <mesh>
+            <scale>0.01 0.01 0.01</scale>
+            <uri>model://balloon/meshes/balloon.stl</uri>
+          </mesh>
+        </geometry>
+      </visual>
+
+      <collision name="hull_collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>0.01 0.01 0.01</scale>
+            <uri>model://balloon/meshes/balloon.stl</uri>
+          </mesh>
+        </geometry>
+      </collision>
+
+    </link>
+
+    <model name='gps0'>
+      <link name='link'>
+        <pose frame=''>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose frame=''>0 0 0 0 0 0</pose>
+          <mass>0.01</mass>
+          <inertia>
+            <ixx>2.1733e-06</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>2.1733e-06</iyy>
+            <iyz>0</iyz>
+            <izz>1.8e-07</izz>
+          </inertia>
+        </inertial>
+        <visual name='visual'>
+          <geometry>
+            <cylinder>
+              <radius>0.01</radius>
+              <length>0.002</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Black</name>
+              <uri>__default__</uri>
+            </script>
+          </material>
+        </visual>
+        <sensor name='gps' type='gps'>
+          <pose frame=''>0 0 0 0 0 0</pose>
+          <plugin name='gps_plugin' filename='libgazebo_gps_plugin.so'>
+            <robotNamespace/>
+            <gpsNoise>1</gpsNoise>
+            <gpsXYRandomWalk>2.0</gpsXYRandomWalk>
+            <gpsZRandomWalk>4.0</gpsZRandomWalk>
+            <gpsXYNoiseDensity>0.0002</gpsXYNoiseDensity>
+            <gpsZNoiseDensity>0.0004</gpsZNoiseDensity>
+            <gpsVXYNoiseDensity>0.2</gpsVXYNoiseDensity>
+            <gpsVZNoiseDensity>0.4</gpsVZNoiseDensity>
+          </plugin>
+        </sensor>
+      </link>
+    </model>
+    <joint name='gps0_joint' type='fixed'>
+      <parent>hull</parent>
+      <child>gps0::link</child>
+    </joint>
+
+    
+    <link name="thrusters_rod">
+      <pose>0.19000000000000017 0 2.2514000000000003 0 0 0</pose><inertial>
+        <mass>0.5</mass>
+        <inertia>
+          <ixx>0.0337625</ixx>
+          <iyy>2.5e-05</iyy>
+          <izz>0.0337625</izz>
+        </inertia>
+      </inertial>
+
+      <gravity>false</gravity>
+      <self_collide>false</self_collide>
+      <velocity_decay/>
+
+
+
+      <collision name="thrusters_rod_port_collision">
+        <pose>0 0.225 0 1.5707963267948966 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.01</radius>
+            <length>0.45</length>
+          </cylinder>
+        </geometry>
+      </collision>
+      <collision name="thrusters_rod_sb_collision">
+        <pose>0 -0.225 0 1.5707963267948966 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.01</radius>
+            <length>0.45</length>
+          </cylinder>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name='thrusters_rod_joint' type='revolute'>
+      <parent>hull</parent>
+      <child>thrusters_rod</child>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-3.141592653589793</lower>
+          <upper>3.141592653589793</upper>
+        </limit>
+        <dynamics>
+          <damping>0.1</damping>
+        </dynamics>
+      </axis>
+      <physics>
+        <ode>
+          <implicit_spring_damper>1</implicit_spring_damper>
+        </ode>
+      </physics>
+    </joint>
+
+    
+    
+    <plugin name='gazebo_airship_dynamics_plugin' filename='libgazebo_airship_dynamics_plugin.so'>
+      <robotNamespace/>
+      <linkName>hull</linkName>
+      <hullVolume>5.97</hullVolume>
+      <airDensity>1.225</airDensity>
+      <m11>0.34094584</m11>
+      <m22>6.89645916</m22>
+      <m26>0.8003539</m26>
+      <m33>6.89645916</m33>
+      <m35>-0.8003539</m35>
+      <m44>0.03909877</m44>
+      <m53>-0.8003539</m53>
+      <m55>4.51385307</m55>
+      <m62>0.8003539</m62>
+      <m66>4.51385307</m66>
+      <distCOV>2.22</distCOV>
+      <distPotentialFlow>3.758</distPotentialFlow>
+      <distFinCenter>3.884</distFinCenter>
+      <distQuarterChord>0.7454</distQuarterChord>
+      <forceHullInviscidFlowCoeff>-0.9576310423950283</forceHullInviscidFlowCoeff>
+      <forceHullViscousFlowCoeff>0.5829522229750153</forceHullViscousFlowCoeff>
+      <momentHullInviscidFlowCoeff>1.9534480725890846</momentHullInviscidFlowCoeff>
+      <momentHullViscousFlowCoeff>-1.1196943420983705</momentHullViscousFlowCoeff>
+      <finNormalForceCoeff>0.552208563394833</finNormalForceCoeff>
+      <finStallAngle>19.098</finStallAngle>
+      <axialDragCoeff>0.35</axialDragCoeff>
+      <windSubTopic>/wind_vel</windSubTopic>
+    </plugin>
+
+    
+    <plugin name='gazebo_imu_plugin' filename='libgazebo_imu_plugin.so'>
+      <robotNamespace/>
+      <linkName>hull</linkName>
+      <imuTopic>/imu</imuTopic>
+      <gyroscopeNoiseDensity>0.0003394</gyroscopeNoiseDensity>
+      <gyroscopeRandomWalk>3.8785e-05</gyroscopeRandomWalk>
+      <gyroscopeBiasCorrelationTime>1000.0</gyroscopeBiasCorrelationTime>
+      <gyroscopeTurnOnBiasSigma>0.0087</gyroscopeTurnOnBiasSigma>
+      <accelerometerNoiseDensity>0.004</accelerometerNoiseDensity>
+      <accelerometerRandomWalk>0.006</accelerometerRandomWalk>
+      <accelerometerBiasCorrelationTime>300.0</accelerometerBiasCorrelationTime>
+      <accelerometerTurnOnBiasSigma>0.196</accelerometerTurnOnBiasSigma>
+    </plugin>
+
+    
+    <plugin name='magnetometer_plugin' filename='libgazebo_magnetometer_plugin.so'>
+      <robotNamespace/>
+      <pubRate>20</pubRate>
+      <noiseDensity>0.0004</noiseDensity>
+      <randomWalk>6.4e-06</randomWalk>
+      <biasCorrelationTime>600</biasCorrelationTime>
+      <magTopic>/mag</magTopic>
+    </plugin>
+
+    
+    <plugin name='barometer_plugin' filename='libgazebo_barometer_plugin.so'>
+      <robotNamespace/>
+      <pubRate>10</pubRate>
+      <baroTopic>/baro</baroTopic>
+    </plugin>
+
+    
+    <plugin name='mavlink_interface' filename='libgazebo_mavlink_interface.so'>
+      <robotNamespace/>
+      <imuSubTopic>/imu</imuSubTopic>
+      <gpsSubTopic>/gps</gpsSubTopic>
+      <magSubTopic>/mag</magSubTopic>
+      <baroSubTopic>/baro</baroSubTopic>
+
+      <mavlink_addr>INADDR_ANY</mavlink_addr>
+      <mavlink_udp_port>14560</mavlink_udp_port>
+      <mavlink_tcp_port>4560</mavlink_tcp_port>
+      <serialEnabled>false</serialEnabled>
+      <serialDevice>/dev/ttyACM0</serialDevice>
+      <baudRate>921600</baudRate>
+      <qgc_addr>INADDR_ANY</qgc_addr>
+      <qgc_udp_port>14550</qgc_udp_port>
+
+      <hil_mode>false</hil_mode>
+      <hil_state_level>false</hil_state_level>
+      <enable_lockstep>true</enable_lockstep>
+      <use_tcp>true</use_tcp>
+
+      <send_vision_estimation>true</send_vision_estimation>
+      <send_odometry>false</send_odometry>
+
+
+    </plugin>
+
+  </model>
+
+</sdf>
+
+<!-- vim: set et ft=xml fenc=utf-8 ff=unix sts=0 sw=2 ts=2 : -->
