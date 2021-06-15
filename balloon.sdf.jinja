@@ -27,9 +27,7 @@
 {# hull volume #}
 {%- set hull_volume = 5.97 -%}
 {# gondola mass #}
-{%- set gondola_mass = 3.3 -%}
-{# payload mass #}
-{%- set pl_mass = 1.05 -%}
+{%- set gondola_mass = 4.3 -%}
 
 {# material properties #}
 {# air density (at MSL 15 deg) #}
@@ -55,7 +53,7 @@
 {%- set gas_mass = gas_density*hull_volume -%}
 
 {# total mass #}
-{%- set total_mass = hull_mass + gas_mass + gondola_mass + pl_mass -%}
+{%- set total_mass = hull_mass + gas_mass + gondola_mass -%}
 
 {# distances (calculate from hull ellipsoid geometry) #}
 {# gondola center #}
