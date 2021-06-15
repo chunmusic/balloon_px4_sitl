@@ -19,7 +19,6 @@
 
 
 
-
 <?xml version="1.0" ?>
 <!-- DO NOT EDIT: Generated from balloon.sdf.jinja -->
 <sdf version="1.5">
@@ -115,63 +114,6 @@
     <joint name='gps0_joint' type='fixed'>
       <parent>hull</parent>
       <child>gps0::link</child>
-    </joint>
-
-    
-    <link name="thrusters_rod">
-      <pose>0.19000000000000017 0 2.2514000000000003 0 0 0</pose><inertial>
-        <mass>0.5</mass>
-        <inertia>
-          <ixx>0.0337625</ixx>
-          <iyy>2.5e-05</iyy>
-          <izz>0.0337625</izz>
-        </inertia>
-      </inertial>
-
-      <gravity>false</gravity>
-      <self_collide>false</self_collide>
-      <velocity_decay/>
-
-
-
-      <collision name="thrusters_rod_port_collision">
-        <pose>0 0.225 0 1.5707963267948966 0 0</pose>
-        <geometry>
-          <cylinder>
-            <radius>0.01</radius>
-            <length>0.45</length>
-          </cylinder>
-        </geometry>
-      </collision>
-      <collision name="thrusters_rod_sb_collision">
-        <pose>0 -0.225 0 1.5707963267948966 0 0</pose>
-        <geometry>
-          <cylinder>
-            <radius>0.01</radius>
-            <length>0.45</length>
-          </cylinder>
-        </geometry>
-      </collision>
-    </link>
-
-    <joint name='thrusters_rod_joint' type='revolute'>
-      <parent>hull</parent>
-      <child>thrusters_rod</child>
-      <axis>
-        <xyz>0 1 0</xyz>
-        <limit>
-          <lower>-3.141592653589793</lower>
-          <upper>3.141592653589793</upper>
-        </limit>
-        <dynamics>
-          <damping>0.1</damping>
-        </dynamics>
-      </axis>
-      <physics>
-        <ode>
-          <implicit_spring_damper>1</implicit_spring_damper>
-        </ode>
-      </physics>
     </joint>
 
     

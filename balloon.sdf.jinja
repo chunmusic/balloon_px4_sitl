@@ -21,20 +21,6 @@
 {%- set r_gon_y = 0 -%}
 {%- set r_gon_z = 0.8486 -%}
 
-{# payload distance from nose and height #}
-{%- set d_pl_x = 2.4 -%}
-{%- set r_pl_z = 0.784 -%}
-
-{# thrust point distance from front of gondola and height #}
-{%- set d_p_x = 0.1 -%}
-{%- set r_p_z = 0.8486 -%}
-
-{# actuator distances #}
-{# motor distance from gondola #}
-{%- set d_mot_y = 0.45 -%}
-{# thruster rod radius #}
-{%- set mot_rod_r = 0.01 -%}
-
 {# masses #}
 {# hull mass #}
 {%- set hull_mass = 1.7 -%}
@@ -74,8 +60,6 @@
 {# distances (calculate from hull ellipsoid geometry) #}
 {# gondola center #}
 {%- set r_gon_x = hull_cov - d_gon_x -%}
-{# thrust center #}
-{%- set r_p_x = hull_cov - (d_p_x + d_gon_x - gondola_length/2)-%}
 
 {# center of gravity coordinate #}
 {%- set r_g_x = (gondola_mass*r_gon_x)/total_mass -%}
@@ -160,7 +144,7 @@
     <self_collide>false</self_collide>
     <static>false</static>
 
-    {# Airship #}
+    {# Balloon #}
     <link name="hull">
       <pose>{{ origin_x }} {{ origin_y }} {{ origin_z }} 0 0 0</pose>
       {{ inertial_offset(total_mass, ixx, iyy, izz, r_g_x, r_g_y, -r_g_z)|indent(6) }}
@@ -238,48 +222,6 @@
     <joint name='gps0_joint' type='fixed'>
       <parent>hull</parent>
       <child>gps0::link</child>
-    </joint>
-
-    {# Thrusters Rod #}
-    <link name="thrusters_rod">
-      <pose>{{ origin_x + r_p_x }} {{ origin_y }} {{ origin_z - r_p_z }} 0 0 0</pose>
-      {%- set thrusters_rod_mass = 0.5 -%}
-      {{ inertial(thrusters_rod_mass, thrusters_rod_mass * (1/12)*(3*mot_rod_r**2 + (2*d_mot_y)**2), thrusters_rod_mass * 0.5*mot_rod_r**2, thrusters_rod_mass * (1/12)*(3*mot_rod_r**2 + (2*d_mot_y)**2))|indent(6) }}
-
-      <gravity>false</gravity>
-      <self_collide>false</self_collide>
-      <velocity_decay/>
-
-
-
-      <collision name="thrusters_rod_port_collision">
-        <pose>0 {{ (d_mot_y)/2 }} 0 {{np.pi / 2}} 0 0</pose>
-        {{ cylinder(mot_rod_r, d_mot_y) | indent(8) }}
-      </collision>
-      <collision name="thrusters_rod_sb_collision">
-        <pose>0 {{ -((d_mot_y)/2) }} 0 {{np.pi / 2}} 0 0</pose>
-        {{ cylinder(mot_rod_r, d_mot_y) | indent(8) }}
-      </collision>
-    </link>
-
-    <joint name='thrusters_rod_joint' type='revolute'>
-      <parent>hull</parent>
-      <child>thrusters_rod</child>
-      <axis>
-        <xyz>0 1 0</xyz>
-        <limit>
-          <lower>-{{ np.pi }}</lower>
-          <upper>{{ np.pi }}</upper>
-        </limit>
-        <dynamics>
-          <damping>0.1</damping>
-        </dynamics>
-      </axis>
-      <physics>
-        <ode>
-          <implicit_spring_damper>1</implicit_spring_damper>
-        </ode>
-      </physics>
     </joint>
 
     {# Plugins #}
