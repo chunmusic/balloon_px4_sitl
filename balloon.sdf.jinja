@@ -6,28 +6,14 @@
 {%- set hull_length = 4.7 -%}
 {%- set hull_max_diameter = 1.6 -%}
 
-{# gondola geometry #}
-{%- set gondola_length = 0.4 -%}
-{%- set gondola_width = 0.17 -%}
-{%- set gondola_height = 0.1 -%}
-
 {# center of volume as measured from the nose #}
 {%- set hull_cov = 2.22 -%}
-
-{# distances: prefix d_ is measured from a specific point and prefix r_ is measured from CoV #}
-{# measured in body NED frame #}
-{# gondola distance from nose and height #}
-{%- set d_gon_x = 2 -%}
-{%- set r_gon_y = 0 -%}
-{%- set r_gon_z = 0.8486 -%}
 
 {# masses #}
 {# hull mass #}
 {%- set hull_mass = 1.7 -%}
 {# hull volume #}
-{%- set hull_volume = 5.97 -%}
-{# gondola mass #}
-{%- set gondola_mass = 4.3 -%}
+{%- set hull_volume = 30.97 -%}
 
 {# material properties #}
 {# air density (at MSL 15 deg) #}
@@ -44,7 +30,7 @@
 {# hull center of volume #}
 {%- set origin_x = hull_cov - hull_length/2 -%}
 {%- set origin_y = 0 -%}
-{%- set origin_z = origin_height + hull_max_diameter/2 + gondola_height + 0.2 -%}
+{%- set origin_z = origin_height + hull_max_diameter/2 + 0.2 -%}
 
 {# ---------------------------------------------------------------- #}
 {# calculations #}
@@ -53,16 +39,7 @@
 {%- set gas_mass = gas_density*hull_volume -%}
 
 {# total mass #}
-{%- set total_mass = hull_mass + gas_mass + gondola_mass -%}
-
-{# distances (calculate from hull ellipsoid geometry) #}
-{# gondola center #}
-{%- set r_gon_x = hull_cov - d_gon_x -%}
-
-{# center of gravity coordinate #}
-{%- set r_g_x = (gondola_mass*r_gon_x)/total_mass -%}
-{%- set r_g_y = 0 -%}
-{%- set r_g_z = (gondola_mass*r_gon_z)/total_mass -%}
+{%- set total_mass = hull_mass + gas_mass -%}
 
 {# moment of inertia #}
 {# hull #}
@@ -75,15 +52,11 @@
 {%- set gas_iyy = (1/5)*gas_mass*((hull_max_diameter/2)**2 + (hull_length/2)**2) -%}
 {%- set gas_izz = (1/5)*gas_mass*((hull_max_diameter/2)**2 + (hull_length/2)**2) -%}
 
-{# gondola #}
-{%- set gondola_ixx = (1/12)*gondola_mass*(gondola_height**2 + gondola_width**2) + gondola_mass*r_gon_x**2 -%}
-{%- set gondola_iyy = (1/12)*gondola_mass*(gondola_height**2 + gondola_length**2) + gondola_mass*r_gon_y**2 -%}
-{%- set gondola_izz = (1/12)*gondola_mass*(gondola_width**2 + gondola_length**2) + gondola_mass*r_gon_z**2 -%}
 
 {# total mass moment of inertia #}
-{%- set ixx = hull_ixx + gas_ixx + gondola_ixx -%}
-{%- set iyy = hull_iyy + gas_iyy + gondola_iyy -%}
-{%- set izz = hull_izz + gas_izz + gondola_izz -%}
+{%- set ixx = hull_ixx + gas_ixx -%}
+{%- set iyy = hull_iyy + gas_iyy -%}
+{%- set izz = hull_izz + gas_izz -%}
 
 {# ---------------------------------------------------------------- #}
 {# macros #}
@@ -144,8 +117,8 @@
 
     {# Balloon #}
     <link name="hull">
-      <pose>{{ origin_x }} {{ origin_y }} {{ origin_z }} 0 0 0</pose>
-      {{ inertial_offset(total_mass, ixx, iyy, izz, r_g_x, r_g_y, -r_g_z)|indent(6) }}
+      <pose>0 0 0 0 0 0</pose>
+      {{ inertial_offset(total_mass, ixx, iyy, izz, 0, 0, -0)|indent(6) }}
 
       <gravity>true</gravity>
       <self_collide>false</self_collide>
@@ -156,9 +129,15 @@
         <geometry>
           <mesh>
             <scale>0.01 0.01 0.01</scale>
-            <uri>model://balloon/meshes/balloon.stl</uri>
+            <uri>model://balloon/meshes/conic.stl</uri>
           </mesh>
         </geometry>
+         <material>
+          <script>
+            <name>Gazebo/Red</name>
+            <uri>__default__</uri>
+          </script>
+        </material>
       </visual>
 
       <collision name="hull_collision">
@@ -166,7 +145,7 @@
         <geometry>
           <mesh>
             <scale>0.01 0.01 0.01</scale>
-            <uri>model://balloon/meshes/balloon.stl</uri>
+            <uri>model://balloon/meshes/conic.stl</uri>
           </mesh>
         </geometry>
       </collision>
